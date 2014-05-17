@@ -1,0 +1,10 @@
+{
+  "packages": {
+    "bower": {},
+    "iron-router": {},
+    "jade": {}
+  },
+  "bower": {
+    "codemirror": "4.1.0"
+  }
+}
