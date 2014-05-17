@@ -3,6 +3,5 @@ Template.projectsIndex.projects = ->
 
 Template.projectsIndex.events(
   'click #new-project': ->
-    Projects.insert(name: 'todo')
-    alert(Projects.find().count())
+    Projects.insert({})
 )

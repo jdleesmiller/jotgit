@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "chokidar": {
+      "version": "0.8.2",
+      "dependencies": {
+        "fsevents": {
+          "version": "0.2.0",
+          "dependencies": {
+            "nan": {
+              "version": "0.8.0"
+            }
+          }
+        },
+        "recursive-readdir": {
+          "version": "0.0.2"
+        }
+      }
+    }
+  }
+}
