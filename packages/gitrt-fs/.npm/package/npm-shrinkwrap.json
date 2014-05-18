@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "chokidar": {
+      "version": "0.8.2",
+      "dependencies": {
+        "fsevents": {
+          "version": "0.2.0",
+          "dependencies": {
+            "nan": {
+              "version": "0.8.0"
+            }
+          }
+        },
+        "recursive-readdir": {
+          "version": "0.0.2"
+        }
+      }
+    },
+    "ot": {
+      "version": "https://github.com/Operational-Transformation/ot.js/tarball/3ab1be8efadd64141e3c13ca4e02325d0331882f"
+    },
+    "shelljs": {
+      "version": "0.3.0"
+    }
+  }
+}

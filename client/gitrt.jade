@@ -1,14 +1,26 @@
 template(name="home")
   h1 gitrt
-  a(href="{{pathFor 'projectsIndex'}}") Projects
+  +files
 
-template(name="projectsIndex")
-  h1 Projects
+template(name="files")
   ul
-    each projects
+    each files
       li
-        a(href="{{pathFor 'projectsShow' _id}}") {{_id}}
-  input.btn#new-project(type="button" value="New")
+        a(href="{{pathFor 'fileEdit' path}}") {{path}}
 
-template(name="projectsShow")
-  h1 Project {{_id}}
+template(name="fileEdit")
+  h1 {{fileInfo._id}}
+  +files
+  textarea#editor
+
+//
+//template(name="projectsIndex")
+//  h1 Projects
+//  ul
+//    each projects
+//      li
+//        a(href="{{pathFor 'projectsShow' _id}}") {{_id}}
+//  input.btn#new-project(type="button" value="New")
+//
+//template(name="projectsShow")
+//  h1 Project {{_id}}
