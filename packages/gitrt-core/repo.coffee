@@ -9,10 +9,22 @@ chokidar = Npm.require('chokidar')
 syncExec = Meteor._wrapAsync(shelljs.exec)
 
 #
-# Repository with file system event notification so we can publish changes.
+# Very simple interface to a git repository.
 #
-# Mainly this is concerned with maintaining the file list. We want to use a
-# simple meteor collection, so it has to be a linear view rather than a tree.
+# We use the working copy to
+#
+# 1) list the files in the project
+#
+# 2) read file content when initialising the server
+#
+# 3) write file content before committing it
+#
+# This approach lets us use the standard git commands to commit.
+#
+# We also watch for files to be added or removed from the working copy (that's
+# what "chokidar" does). This isn't really used yet, but I think it may be when
+# we get to accepting git pushes. For now, it's just fun to add a file and watch
+# it show up in the web interface.
 #
 class Repo extends EventEmitter
   constructor: (@repoPath) ->
