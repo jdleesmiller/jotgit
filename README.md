@@ -25,7 +25,7 @@ It should pull in all of the required dependencies. Make some tea.
 
 Then visit [localhost:3000](http://localhost:3000) in your browser. Be sure to try with multiple windows!
 
-By default, it loads up the test repository in `tests/demo`. To point it at another repository, you can either edit `server/gitrt.coffee` or use [http://docs.meteor.com/#meteor_settings](meteor settings) to specify an alternative `projectPath`.
+By default, it loads up the test repository in `tests/demo`. To point it at another repository, you can either edit `server/gitrt.coffee` or use [meteor settings](http://docs.meteor.com/#meteor_settings) to specify an alternative `projectPath`.
 
 ## About
 
