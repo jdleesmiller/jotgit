@@ -21,9 +21,14 @@ class EditorServer extends EventEmitter
   operations: -> @server.operations
   revision: -> @server.operations.length
 
-  receiveOperation: (clientId, revision, operation, selection) ->
-    #console.log ['receiveOperation', arguments...]
+  emitOperationsAfter: (startRevision) ->
+    clientId = null
+    selection = null
+    for operation, revision in @operations().slice(startRevision)
+      this.emit 'operationApplied', clientId, revision + startRevision,
+        operation.wrapped.toJSON(), selection
 
+  receiveOperation: (clientId, revision, operation, selection) ->
     wrapped = new ot.WrappedOperation(
       ot.TextOperation.fromJSON(operation),
       selection && ot.Selection.fromJSON(selection)
@@ -33,7 +38,8 @@ class EditorServer extends EventEmitter
     selectionPrime = wrappedPrime.meta
     @updateSelection(clientId, selectionPrime)
 
-    this.emit 'operationApplied', clientId, wrappedPrime, selectionPrime
+    this.emit 'operationApplied',
+      clientId, @revision(), wrappedPrime.wrapped.toJSON(), selectionPrime
 
     null
 

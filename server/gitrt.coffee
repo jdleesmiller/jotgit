@@ -29,10 +29,10 @@ Meteor.startup ->
     server = editorServers[filePath] ||= new GitRt.EditorServer(
       repo.readFile(filePath))
 
-    self.added('fileInfo', filePath,
-      clientId: this.connection.id,
-      revision: server.revision(),
-      document: server.document())
+    self.added 'fileInfo', filePath,
+      clientId: this.connection.id
+      revision: server.revision()
+      document: server.document()
 
     self.ready()
 
@@ -42,19 +42,15 @@ Meteor.startup ->
     server = editorServers[filePath]
     throw new Error("no server for #{filePath}") unless server
 
-    # TODO clean this up
-    for operation, revision in server.operations().slice(startRevision)
-      self.added 'fileOperations', revision + startRevision,
-        clientId: null,
-        operation: operation.wrapped.toJSON()
-
-    handleOperationApplied = (clientId, operation, selection) ->
-      console.log ['op applied', operation]
-      self.added 'fileOperations', server.revision(),
-        clientId: clientId,
-        operation: operation.wrapped.toJSON(),
+    handleOperationApplied = (clientId, revision, operationJson, selection) ->
+      console.log ['op applied', operationJson]
+      self.added 'fileOperations', revision,
+        clientId: clientId
+        operation: operationJson
         selection: selection
     server.addListener 'operationApplied', handleOperationApplied
+
+    server.emitOperationsAfter startRevision
 
     self.onStop ->
       server.removeListener 'operationApplied', handleOperationApplied
@@ -63,6 +59,9 @@ Meteor.startup ->
 
   Meteor.publish 'fileSelections', (filePath) ->
     self = this
+    
+    # TODO we never remove clients at the moment, so their selections are
+    # immortal; we should be handling client disconnections
 
     server = editorServers[filePath]
     throw new Error("no server for #{filePath}") unless server
@@ -70,7 +69,6 @@ Meteor.startup ->
     self.added 'fileSelections', filePath, {}
 
     handleSelectionsUpdated = (selections) ->
-      console.log selections
       self.changed 'fileSelections', filePath, selections
     server.addListener 'selectionsUpdated', handleSelectionsUpdated
 
@@ -93,7 +91,7 @@ Meteor.startup ->
       catch error
         console.log error
         console.log error.stack
-        'fail' # TODO the client doesn't care
+        'fail' # TODO the client doesn't trap this, but it could do
 
     sendSelection: (filePath, selection) ->
       server = editorServers[filePath]
@@ -101,15 +99,6 @@ Meteor.startup ->
 
       clientId = this.connection.id
       server.updateSelection(clientId, selection)
-  )
-
-  #  openFile: (filePath) ->
-  #    server = editorServers[filePath] ||= new GitRt.EditorServer(
-  #      repo.readFile(filePath))
-
-  #    {clientId: Math.random(), document: server.document()}
-  #  edit: (clientId, filePath, revision, operation, selection) ->
-  #    null
 
     commit: (message) ->
       for filePath, server of editorServers
