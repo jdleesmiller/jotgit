@@ -18,6 +18,9 @@ class Repo extends EventEmitter
   constructor: (@repoPath) ->
     self = this
 
+    unless fs.existsSync(Path.join(@repoPath, '.git'))
+      @spawnInRepoPath 'git', ['init']
+
     watcher = chokidar.watch(@repoPath,
       ignored: /\/\.git/,
       ignoreInitial: true)
