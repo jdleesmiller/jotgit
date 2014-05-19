@@ -5,6 +5,11 @@
     "jade": {}
   },
   "bower": {
-    "codemirror": "4.1.0"
+    "codemirror": {
+      "version": "4.1.0",
+      "additionalFiles": [
+        "mode/markdown/markdown.js"
+      ]
+    }
   }
 }
