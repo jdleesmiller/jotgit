@@ -111,3 +111,9 @@ Meteor.startup ->
   #  edit: (clientId, filePath, revision, operation, selection) ->
   #    null
 
+    commit: (message) ->
+      for filePath, server of editorServers
+        repo.writeFile filePath, server.document()
+      result = repo.commit(message)
+      result
+  )

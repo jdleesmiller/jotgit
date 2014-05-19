@@ -1,6 +1,9 @@
 template(name="home")
-  h1 gitrt
-  +files
+  div.container
+    div.row
+      h1 gitrt
+      h2 files
+      +files
 
 template(name="files")
   ul
@@ -9,9 +12,14 @@ template(name="files")
         a(href="{{pathFor 'fileEdit' path}}") {{path}}
 
 template(name="fileEdit")
-  h1 {{fileInfo._id}}
-  +files
-  textarea#editor
+  div.container
+    div.row
+      h1 gitrt
+      a.commit(href='#') save project
+      h2 files
+      +files
+      h3 {{fileInfo._id}}
+      textarea#editor
 
 //
 //template(name="projectsIndex")

@@ -1,6 +1,8 @@
 EventEmitter = Npm.require('events').EventEmitter
 Path = Npm.require('path')
 fs = Npm.require('fs')
+Future = Npm.require('fibers/future')
+spawn = Npm.require('child_process').spawn
 shelljs = Npm.require('shelljs')
 chokidar = Npm.require('chokidar')
 
@@ -48,5 +50,36 @@ class Repo extends EventEmitter
   readFile: (path) ->
     absolutePath = @checkPath(path)
     fs.readFileSync(absolutePath, encoding: 'utf8')
+
+  writeFile: (path, data) ->
+    absolutePath = @checkPath(path)
+    fs.writeFileSync(absolutePath, data, encoding: 'utf8')
+
+  spawnInRepoPath: (command, args=[], options={}) ->
+    options['cwd'] = @repoPath
+    options['stdio'] ||= ['ignore', 1, 2] # echo output to server logs
+    future = new Future()
+    child = spawn(command, args, options)
+    child.on 'close', (code, signal) ->
+      future.return(code: code, signal: signal)
+    child.on 'error', (err) ->
+      future.throw(err)
+    future.wait()
+
+  commit: (message) ->
+    message ||= 'saved'
+    addResult = @spawnInRepoPath('git', ['add', '.'])
+    console.log addResult
+    if addResult.code == 0
+      commitResult = @spawnInRepoPath('git', ['commit', '--message', message])
+      console.log commitResult
+      if commitResult.code == 0
+        'success'
+      else if commitResult.code == 1
+        'no changes'
+      else
+        'commit failed'
+    else
+      'add failed' # not sure what would cause this to fail
 
 GitRt.Repo = Repo

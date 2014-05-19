@@ -12,6 +12,16 @@ Template.files.files = -> Files.find()
 
 Template.fileEdit.fileInfo = -> FileInfo.findOne()
 
+Template.fileEdit.events(
+  'click a.commit': ->
+    $('a.commit').text('saving...')
+    message = prompt('Name for this save (optional):')
+    Meteor.call 'commit', message, (error, result) ->
+      $('a.commit').text('save project')
+      alert(result) if result != 'success'
+    false
+)
+
 # note: this isn't called when switching between files
 Template.fileEdit.rendered = ->
   console.log 'rendered'
