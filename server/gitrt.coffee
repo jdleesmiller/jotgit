@@ -80,7 +80,6 @@ Meteor.startup ->
   Meteor.methods(
     sendOperation: (filePath, revision, operation, selection) ->
       try
-        console.log ['sendOperation', arguments...]
         server = editorServers[filePath]
         throw new Error("no server for #{filePath}") unless server
 
