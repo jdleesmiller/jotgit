@@ -1,6 +1,8 @@
+path = Npm.require('path')
+
 Meteor.startup ->
 
-  Meteor.settings.projectPath ||= '/tmp/11'
+  Meteor.settings.projectPath ||= path.join(process.env.PWD, 'tests/demo')
 
   repo = new GitRt.Repo(Meteor.settings.projectPath)
 

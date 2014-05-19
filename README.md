@@ -1,37 +1,23 @@
-# Setup Notes
+# gitrt
 
-on node 0.10.28 with meteor 0.8.1.2
+Git-backed real time collaborative editor built with meteor.
 
-nvm use 0.10
-npm install -g meteorite
+## Getting Started
 
-It looks like nodegit is built with an absolute path to the libgit2 dylib, but
-meteor moves things around in the course of the build process and apparently
-breaks it.
-
-Workaround is to add a console.log(e) to
-`packages/nodegit/.build/npm/node_modules/nodegit/index.js`
-like this:
+If you have not yet installed Meteor, do that:
 ```
-var rawApi;
-try {
-  rawApi = require('./build/Release/nodegit');
-} catch (e) {
-  console.log(e);
-  rawApi = require('./build/Debug/nodegit');
-}
+curl https://install.meteor.com | /bin/sh
 ```
 
-Error looks like:
-
+Clone this repository:
 ```
-I20140517-17:50:55.827(1)? [Error: dlopen(/Users/john/ex/gitrt/packages/nodegit/.build/npm/node_modules/nodegit/build/Release/nodegit.node, 1): Library not loaded: /Users/john/ex/gitrt/packages/nodegit/.npm/package-new-1s6evra/node_modules/nodegit/vendor/libgit2/build/libgit2.0.dylib
-I20140517-17:50:55.895(1)?   Referenced from: /Users/john/ex/gitrt/packages/nodegit/.build/npm/node_modules/nodegit/build/Release/nodegit.node
-I20140517-17:50:55.895(1)?   Reason: image not found]
+git clone https://github.com/jdleesmiller/gitrt.git
 ```
 
-So created symlink:
 ```
-mkdir -p packages/nodegit/.npm/package-new-1s6evra/node_modules/nodegit/vendor/libgit2/build/
-ln -s $PWD/packages/nodegit/.build/npm/node_modules/nodegit/vendor/libgit2/build/libgit2.0.dylib packages/nodegit/.npm/package-new-1s6evra/node_modules/nodegit/vendor/libgit2/build/libgit2.0.dylib
+meteor
 ```
+
+Finally, visit [localhost:3000](http://localhost:3000) in your browser. Be sure
+to try with multiple windows!
+
