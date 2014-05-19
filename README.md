@@ -2,7 +2,7 @@
 
 Git-backed real time collaborative editor built with meteor.
 
-The current version of gitrt is a prototype that lets you collaboratively edit Markdown files in a git repository on the server where it runs. Then you can save the files (with an optional commit message), and they'll be committed to the repository.
+The current version of gitrt is a prototype that lets you collaboratively edit Markdown files in a local git repository. Then you can save the files (with an optional commit message), and they'll be committed to the repository.
 
 ## Getting Started
 
@@ -45,9 +45,13 @@ The code is structured in the usual way for a meteor app: the files in `server` 
 
 * allow remote pushes to the repository
 
+* auto-saves
+
 * multiple projects
 
 * user accounts
+
+* some way of handling multiple commit authors (apparently not supported by git)
 
 * option to commit to github instead of a local git repo
 
