@@ -1,4 +1,4 @@
-Package.describe({ summary: "gitrt-fs" });
+Package.describe({ summary: "gitrt-core" });
 
 // note: there is a bug in ot 0.0.14 that's fixed in master, but meteor
 // currently requires us to specify a particular commit here
@@ -13,7 +13,10 @@ Package.on_use(function (api) {
   api.export('GitRt');
   api.export('ot');
 
-  api.add_files(['gitrt.coffee','repo.coffee','history.coffee'], 'server');
+  api.add_files([
+    'gitrt.coffee',
+    'repo.coffee',
+    'editor-server.coffee'], 'server');
 
   var otPath = '.npm/package/node_modules/ot/lib/';
 

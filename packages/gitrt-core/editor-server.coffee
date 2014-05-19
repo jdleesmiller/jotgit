@@ -3,7 +3,7 @@ ot = Npm.require('ot')
 
 # ot doesn't export this by default
 ot.WrappedOperation = Npm.require(
-  './npm/gitrt-fs/main/node_modules/ot/lib/wrapped-operation.js')
+  './npm/gitrt-core/main/node_modules/ot/lib/wrapped-operation.js')
 
 #
 # Manage the sequence of operational transformation edits maintained on the
