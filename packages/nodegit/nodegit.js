@@ -1,1 +1,0 @@
-NodeGit = Npm.require("nodegit");

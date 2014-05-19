@@ -9,7 +9,6 @@ coffeescript
 bootstrap
 jquery
 bower
-nodegit
 iron-router
 jade
 gitrt-fs
