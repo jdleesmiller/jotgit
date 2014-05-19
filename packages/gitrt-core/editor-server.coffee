@@ -6,11 +6,9 @@ ot.WrappedOperation = Npm.require(
   './npm/gitrt-core/main/node_modules/ot/lib/wrapped-operation.js')
 
 #
-# Manage the sequence of operational transformation edits maintained on the
-# server. All clients that are editing a particular file share this sequence,
-# but, crucially, they do not write their edits to the sequence directly,
-# because the server may have to transform them before they are added to this
-# sequence.
+# Wrapper around ot.js's ot.Server that handles serialisation and emits events
+# that we consume in the publish functions that send transformed operations to
+# all of the clients.
 #
 class EditorServer extends EventEmitter
   constructor: (document, operations=[]) ->
@@ -21,6 +19,9 @@ class EditorServer extends EventEmitter
   operations: -> @server.operations
   revision: -> @server.operations.length
 
+  # this is used to 'catch up' when a client first connects, because there may
+  # be a delay between when the client receives the latest version upon
+  # connecting and when it starts listening for further edits
   emitOperationsAfter: (startRevision) ->
     clientId = null
     selection = null
