@@ -24,7 +24,6 @@ Template.fileEdit.events(
 
 # note: this isn't called when switching between files
 Template.fileEdit.rendered = ->
-  console.log 'rendered'
   GitRt.cm = CodeMirror.fromTextArea(editor,
     lineNumbers: true
   )
@@ -32,7 +31,6 @@ Template.fileEdit.rendered = ->
 
 # note: this isn't called when switching between files
 Template.fileEdit.destroyed = ->
-  console.log 'destroyed'
   if GitRt.cm
     $(GitRt.cm.getWrapperElement()).remove()
     delete GitRt.cm
@@ -43,7 +41,6 @@ class MeteorServerAdapter
   sendOperation: (revision, operation, selection) ->
     self = this
 
-    console.log ['send op', arguments...]
     Meteor.call('sendOperation', @filePath, revision, operation,
       selection, -> self.trigger('ack'))
 
@@ -58,7 +55,6 @@ class MeteorServerAdapter
 
 Deps.autorun ->
   fileInfo = FileInfo.findOne()
-  console.log ['autorun fileInfo', fileInfo]
   if fileInfo
     # TODO is GitRt.cm guaranteed to be set here? looks like no
     try
@@ -69,7 +65,6 @@ Deps.autorun ->
     GitRt.cm.focus()
     # TODO are we going to handle clients ourselves?
     clients = []
-    console.log fileInfo
     serverAdapter = new MeteorServerAdapter(fileInfo._id)
     GitRt.editorClient = new ot.EditorClient(fileInfo.revision, clients,
       serverAdapter, GitRt.cmAdapter)
@@ -82,7 +77,6 @@ Deps.autorun ->
       operations = FileOperations.find(
         {_id: {$gt: lastRevision}}, sort: {_id: 1})
       operations.forEach (operation) ->
-        console.log operation
         lastRevision = operation._id
         if operation.clientId != fileInfo.clientId
           serverAdapter.trigger('operation', operation.operation)
