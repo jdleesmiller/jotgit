@@ -2,6 +2,8 @@
 
 Git-backed real time collaborative editor built with meteor.
 
+Here's a quick demo: [http://youtu.be/z-_wSiGS18U](http://youtu.be/z-_wSiGS18U)
+
 The current version of jotgit is a prototype that lets you collaboratively edit Markdown files in a local git repository. Then you can save the files (with an optional commit message), and they'll be committed to the repository.
 
 ## Getting Started
