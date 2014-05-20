@@ -16,9 +16,12 @@ Template.fileEdit.events(
   'click a.commit': ->
     $('a.commit').text('saving...')
     message = prompt('Name for this save (optional):')
-    Meteor.call 'commit', message, (error, result) ->
+    if message == null
       $('a.commit').text('save project')
-      alert(result) if result != 'success'
+    else
+      Meteor.call 'commit', message, (error, result) ->
+        $('a.commit').text('save project')
+        alert(result) if result != 'success'
     false
 )
 
