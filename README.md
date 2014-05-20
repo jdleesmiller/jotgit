@@ -1,8 +1,8 @@
-# gitrt
+# jotgit
 
 Git-backed real time collaborative editor built with meteor.
 
-The current version of gitrt is a prototype that lets you collaboratively edit Markdown files in a local git repository. Then you can save the files (with an optional commit message), and they'll be committed to the repository.
+The current version of jotgit is a prototype that lets you collaboratively edit Markdown files in a local git repository. Then you can save the files (with an optional commit message), and they'll be committed to the repository.
 
 ## Getting Started
 
@@ -14,7 +14,7 @@ curl https://install.meteor.com | /bin/sh
 
 Clone this repository:
 ```
-git clone https://github.com/jdleesmiller/gitrt.git
+git clone https://github.com/jdleesmiller/jotgit.git
 ```
 
 Start up meteor:
@@ -25,13 +25,13 @@ It should pull in all of the required dependencies. Make some tea.
 
 Then visit [localhost:3000](http://localhost:3000) in your browser. Be sure to try with multiple windows!
 
-By default, it loads up the test repository in `tests/demo`. To point it at another repository, you can either edit `server/gitrt.coffee` or use [meteor settings](http://docs.meteor.com/#meteor_settings) to specify an alternative `projectPath`.
+By default, it loads up the test repository in `tests/demo`. To point it at another repository, you can either edit `server/jotgit.coffee` or use [meteor settings](http://docs.meteor.com/#meteor_settings) to specify an alternative `projectPath`.
 
 ## About
 
-Gitrt ...
+Jotgit ...
 
-* is written in [CoffeeScript](http://coffeescript.org/), a language that looks a bit like Python and compiles to JavaScript.
+* is written in [CoffeeScript](http://coffeescript.org/), a language that feels a bit like Python and compiles to JavaScript.
 
 * is built with [Meteor](https://www.meteor.com/), which is an up-and-comping web framework for real time web apps. It is remarkably developer-friendly, and it already has [very good documentation](http://docs.meteor.com/).
 
@@ -39,7 +39,7 @@ Gitrt ...
 
 * uses [CodeMirror](http://codemirror.net/) for the editing component.
 
-The code is structured in the usual way for a meteor app: the files in `server` run on the server, the files in `client` run on the client, and the files in `lib` run on both. There's also a `gitrt-core` package in `packages/gitrt-core` that contains most of the core classes (stuff that is not very meteor-specific).
+The code is structured in the usual way for a meteor app: the files in `server` run on the server, the files in `client` run on the client, and the files in `lib` run on both. There's also a `jotgit-core` package in `packages/jotgit-core` that contains most of the core classes (stuff that is not very meteor-specific).
 
 ## Roadmap
 
