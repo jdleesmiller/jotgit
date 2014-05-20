@@ -1,4 +1,4 @@
-@GitRt ||= {}
+@Jotgit ||= {}
 
 @Files = new Meteor.Collection('files')
 
@@ -24,16 +24,16 @@ Template.fileEdit.events(
 
 # note: this isn't called when switching between files
 Template.fileEdit.rendered = ->
-  GitRt.cm = CodeMirror.fromTextArea(editor,
+  Jotgit.cm = CodeMirror.fromTextArea(editor,
     lineNumbers: true
   )
-  GitRt.cmAdapter = new ot.CodeMirrorAdapter(GitRt.cm)
+  Jotgit.cmAdapter = new ot.CodeMirrorAdapter(Jotgit.cm)
 
 # note: this isn't called when switching between files
 Template.fileEdit.destroyed = ->
-  if GitRt.cm
-    $(GitRt.cm.getWrapperElement()).remove()
-    delete GitRt.cm
+  if Jotgit.cm
+    $(Jotgit.cm.getWrapperElement()).remove()
+    delete Jotgit.cm
 
 class MeteorServerAdapter
   constructor: (@filePath) ->
@@ -56,18 +56,18 @@ class MeteorServerAdapter
 Deps.autorun ->
   fileInfo = FileInfo.findOne()
   if fileInfo
-    # TODO is GitRt.cm guaranteed to be set here? looks like no
+    # TODO is Jotgit.cm guaranteed to be set here? looks like no
     try
-      GitRt.cmAdapter.ignoreNextChange = true
-      GitRt.cm.setValue fileInfo.document
+      Jotgit.cmAdapter.ignoreNextChange = true
+      Jotgit.cm.setValue fileInfo.document
     finally
-      GitRt.cmAdapter.ignoreNextChange = false
-    GitRt.cm.focus()
+      Jotgit.cmAdapter.ignoreNextChange = false
+    Jotgit.cm.focus()
     # TODO are we going to handle clients ourselves?
     clients = []
     serverAdapter = new MeteorServerAdapter(fileInfo._id)
-    GitRt.editorClient = new ot.EditorClient(fileInfo.revision, clients,
-      serverAdapter, GitRt.cmAdapter)
+    Jotgit.editorClient = new ot.EditorClient(fileInfo.revision, clients,
+      serverAdapter, Jotgit.cmAdapter)
 
     Meteor.subscribe('fileOperations', fileInfo._id)
     Meteor.subscribe('fileSelections', fileInfo._id)

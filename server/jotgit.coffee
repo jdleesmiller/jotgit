@@ -4,7 +4,7 @@ Meteor.startup ->
 
   Meteor.settings.projectPath ||= path.join(process.env.PWD, 'tests/demo')
 
-  repo = new GitRt.Repo(Meteor.settings.projectPath)
+  repo = new Jotgit.Repo(Meteor.settings.projectPath)
 
   editorServers = {}
 
@@ -28,7 +28,7 @@ Meteor.startup ->
   Meteor.publish 'fileInfo', (filePath) ->
     self = this
 
-    server = editorServers[filePath] ||= new GitRt.EditorServer(
+    server = editorServers[filePath] ||= new Jotgit.EditorServer(
       repo.readFile(filePath))
 
     self.added 'fileInfo', filePath,

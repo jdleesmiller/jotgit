@@ -1,4 +1,4 @@
-Package.describe({ summary: "gitrt-core" });
+Package.describe({ summary: "jotgit-core" });
 
 // note: there is a bug in ot 0.0.14 that's fixed in master, but meteor
 // currently requires us to specify a particular commit here
@@ -10,11 +10,11 @@ Npm.depends({
 
 Package.on_use(function (api) {
   api.use('coffeescript');
-  api.export('GitRt');
+  api.export('Jotgit');
   api.export('ot');
 
   api.add_files([
-    'gitrt.coffee',
+    'jotgit.coffee',
     'repo.coffee',
     'editor-server.coffee'], 'server');
 

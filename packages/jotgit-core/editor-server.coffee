@@ -3,7 +3,7 @@ ot = Npm.require('ot')
 
 # ot doesn't export this by default
 ot.WrappedOperation = Npm.require(
-  './npm/gitrt-core/main/node_modules/ot/lib/wrapped-operation.js')
+  './npm/jotgit-core/main/node_modules/ot/lib/wrapped-operation.js')
 
 #
 # Wrapper around ot.js's ot.Server that handles serialisation and emits events
@@ -54,4 +54,4 @@ class EditorServer extends EventEmitter
 
     null
   
-GitRt.EditorServer = EditorServer
+Jotgit.EditorServer = EditorServer

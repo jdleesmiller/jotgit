@@ -97,4 +97,4 @@ class Repo extends EventEmitter
     else
       'add failed' # not sure what would cause this to fail
 
-GitRt.Repo = Repo
+Jotgit.Repo = Repo
