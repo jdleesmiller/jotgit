@@ -1,1 +1,13 @@
 /* CSS declarations go here */
+.cm-header-1 {
+  font-size: xx-large;
+}
+
+.cm-header-2 {
+  font-size: x-large;
+}
+
+.cm-header-3 {
+  font-size: large;
+}
+
