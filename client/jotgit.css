@@ -11,3 +11,8 @@
   font-size: large;
 }
 
+img#logo {
+  float: right;
+  padding-top: 20px;
+  width: 100px;
+}
