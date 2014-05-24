@@ -1,4 +1,5 @@
 path = Npm.require('path')
+http = Npm.require('http')
 
 Meteor.startup ->
 
@@ -107,3 +108,39 @@ Meteor.startup ->
       result = repo.commit(message)
       result
   )
+
+  Router.map ->
+    #
+    # HTTP read access via git's "dumb protocol"
+    #
+    @route 'projectGit',
+      path: '/project.git/:file(*)'
+      where: 'server'
+      action: ->
+        if @request.method != 'GET'
+          @response.statusCode = 405
+          @response.setHeader 'Allow', 'GET'
+          @response.write "405 Method Not Allowed\n"
+          return
+
+        try
+          gitPath = path.join('.git', @params.file)
+
+          @response.statusCode = 200
+          @response.setHeader 'Content-Type', 'application/octet-stream'
+
+          if /\bgzip\b/.test(@request.headers['accept-encoding'])
+            @response.setHeader 'Content-Encoding', 'gzip'
+            repo.gzipStreamFile gitPath, @response
+          else
+            repo.streamFile gitPath, @response
+
+        catch error
+          @response.removeHeader 'Content-Encoding'
+          if error.code == 'ENOENT' || error.code == 'EISDIR'
+            @response.statusCode = 404
+            @response.write "404 Not Found\n"
+          else
+            console.log [@params.file, error]
+            @response.statusCode = 500
+            @response.write "500 Internal Server Error\n"

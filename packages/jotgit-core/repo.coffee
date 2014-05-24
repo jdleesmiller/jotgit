@@ -5,6 +5,7 @@ Future = Npm.require('fibers/future')
 spawn = Npm.require('child_process').spawn
 shelljs = Npm.require('shelljs')
 chokidar = Npm.require('chokidar')
+zlib = Npm.require('zlib')
 
 syncExec = Meteor._wrapAsync(shelljs.exec)
 
@@ -30,8 +31,16 @@ class Repo extends EventEmitter
   constructor: (@repoPath) ->
     self = this
 
+    # note: man git-init(1) says it is OK to run init more than once
     unless fs.existsSync(Path.join(@repoPath, '.git'))
       @spawnInRepoPath 'git', ['init']
+
+    # this post-update hook allows access via git's "dumb protocol"
+    postUpdateHook = Path.join(@repoPath, '.git', 'hooks', 'post-update')
+    unless fs.existsSync(postUpdateHook)
+      fs.linkSync "#{postUpdateHook}.sample", postUpdateHook
+
+    @spawnInRepoPath 'git', ['update-server-info']
 
     watcher = chokidar.watch(@repoPath,
       ignored: /\/\.git/,
@@ -65,6 +74,24 @@ class Repo extends EventEmitter
   readFile: (path) ->
     absolutePath = @checkPath(path)
     fs.readFileSync(absolutePath, encoding: 'utf8')
+
+  streamFile: (path, output) ->
+    absolutePath = @checkPath(path)
+    future = new Future()
+    input = fs.createReadStream(absolutePath)
+    input.on 'error', (err) -> future.throw(err)
+    input.on 'close', () -> future.return()
+    input.pipe(output)
+    future.wait()
+
+  gzipStreamFile: (path, output) ->
+    future = new Future()
+    gzip = zlib.createGzip()
+    gzip.on 'error', (err) -> future.throw(err)
+    gzip.on 'close', () -> future.return()
+    gzip.pipe(output)
+    @streamFile(path, gzip)
+    future.wait()
 
   writeFile: (path, data) ->
     absolutePath = @checkPath(path)
