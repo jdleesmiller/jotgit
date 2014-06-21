@@ -134,8 +134,8 @@ Meteor.startup ->
         if service == 'git-receive-pack' || service == 'git-upload-pack'
           repo.getFromService(@response, service)
         else
-          response.statusCode = 500 # TODO do something else here?
-          response.write "500 Internal Server Error\n"
+          @response.statusCode = 500 # TODO do something else here?
+          @response.write "500 Internal Server Error\n"
 
     @route 'projectGitReceivePack',
       path: '/project.git/git-receive-pack'
