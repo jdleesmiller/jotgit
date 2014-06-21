@@ -124,6 +124,10 @@ Meteor.startup ->
   # This is based on "Implementing a Git HTTP Server" by Michael F. Collins, III
   # http://www.michaelfcollins3.me/blog/2012/05/18/implementing-a-git-http-server.html
   #
+  # Some other libraries that may be helpful here:
+  # https://github.com/substack/pushover
+  # https://github.com/schacon/grack
+  #
   Router.map ->
     @route 'projectGitInfoRefs',
       path: '/project.git/info/refs'
