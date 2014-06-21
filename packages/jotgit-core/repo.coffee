@@ -33,14 +33,19 @@ class Repo extends EventEmitter
 
     # note: man git-init(1) says it is OK to run init more than once
     unless fs.existsSync(Path.join(@repoPath, '.git'))
-      @spawnInRepoPath 'git', ['init']
+      @runInRepoPath 'git', ['init']
+
+    # this config option is required in order to accept a git push even though
+    # we have a working copy checked out; this won't be necessary when we use
+    # the bare repo instead
+    @runInRepoPath 'git', ['config', 'receive.denyCurrentBranch', 'ignore']
 
     # this post-update hook allows access via git's "dumb protocol"
     postUpdateHook = Path.join(@repoPath, '.git', 'hooks', 'post-update')
     unless fs.existsSync(postUpdateHook)
       fs.linkSync "#{postUpdateHook}.sample", postUpdateHook
 
-    @spawnInRepoPath 'git', ['update-server-info']
+    @runInRepoPath 'git', ['update-server-info']
 
     watcher = chokidar.watch(@repoPath,
       ignored: /\/\.git/,
@@ -98,22 +103,28 @@ class Repo extends EventEmitter
     fs.writeFileSync(absolutePath, data, encoding: 'utf8')
 
   spawnInRepoPath: (command, args=[], options={}) ->
-    options['cwd'] = @repoPath
-    options['stdio'] ||= ['ignore', 1, 2] # echo output to server logs
+    options.cwd = @repoPath
+    spawn(command, args, options)
+
+  waitOnSpawn: (child) ->
     future = new Future()
-    child = spawn(command, args, options)
     child.on 'close', (code, signal) ->
       future.return(code: code, signal: signal)
     child.on 'error', (err) ->
       future.throw(err)
     future.wait()
 
+  runInRepoPath: (command, args=[], options={}) ->
+    options.stdio ||= ['ignore', 1, 2] # echo output to server logs
+    child = @spawnInRepoPath(command, args, options)
+    @waitOnSpawn(child)
+
   commit: (message) ->
     message ||= 'saved'
-    addResult = @spawnInRepoPath('git', ['add', '.'])
+    addResult = @runInRepoPath('git', ['add', '.'])
     console.log addResult
     if addResult.code == 0
-      commitResult = @spawnInRepoPath('git', ['commit', '--message', message])
+      commitResult = @runInRepoPath('git', ['commit', '--message', message])
       console.log commitResult
       if commitResult.code == 0
         'success'
@@ -123,5 +134,41 @@ class Repo extends EventEmitter
         'commit failed'
     else
       'add failed' # not sure what would cause this to fail
+
+  setNoCacheHeaders: (response) ->
+    response.setHeader 'Expires', 'Fri, 01 Jan 1980 00:00:00 GMT'
+    response.setHeader 'Pragma', 'no-cache'
+    response.setHeader 'Cache-Control', 'no-cache, max-age=0, must-revalidate'
+
+  gitPacket: (packet) ->
+    # prefix packet with 4-digit zero-padded length in hexadecimal
+    length = "0000#{(packet.length + 4).toString(16)}".slice(-4)
+    "#{length}#{packet}"
+
+  getFromService: (response, service) ->
+    @setNoCacheHeaders response
+    response.setHeader 'Content-Type', "application/x-#{service}-advertisement"
+
+    response.write @gitPacket("# service=#{service}\n") + "0000"
+
+    child = @spawnInRepoPath(
+      service, ['--stateless-rpc', '--advertise-refs', '.'],
+      stdio: ['ignore', 'pipe', 2])
+    child.stdout.pipe response
+    @waitOnSpawn(child)
+
+  postToService: (request, response, service) ->
+    @setNoCacheHeaders response
+    response.setHeader 'Content-Type', "application/x-#{service}-result"
+
+    child = @spawnInRepoPath(
+      service, ['--stateless-rpc', '.'],
+      stdio: ['pipe', 'pipe', 2])
+    request.pipe child.stdin
+    child.stdout.pipe response
+    @waitOnSpawn(child)
+
+  resetHard: ->
+    @runInRepoPath 'git', ['reset', '--hard']
 
 Jotgit.Repo = Repo

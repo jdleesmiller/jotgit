@@ -109,38 +109,45 @@ Meteor.startup ->
       result
   )
 
+  checkMethod = (request, response, allowedMethod) ->
+    if request.method == allowedMethod
+      return true
+    else
+      response.statusCode = 405
+      response.setHeader 'Allow', allowedMethod
+      response.write "405 Method Not Allowed\n"
+      return false
+
+  #
+  # git push and pull using the 'smart' protocol
+  #
+  # This is based on "Implementing a Git HTTP Server" by Michael F. Collins, III
+  # http://www.michaelfcollins3.me/blog/2012/05/18/implementing-a-git-http-server.html
+  #
   Router.map ->
-    #
-    # HTTP read access via git's "dumb protocol"
-    #
-    @route 'projectGit',
-      path: '/project.git/:file(*)'
+    @route 'projectGitInfoRefs',
+      path: '/project.git/info/refs'
       where: 'server'
       action: ->
-        if @request.method != 'GET'
-          @response.statusCode = 405
-          @response.setHeader 'Allow', 'GET'
-          @response.write "405 Method Not Allowed\n"
-          return
+        return unless checkMethod(@request, @response, 'GET')
+        service = @request.query.service
+        if service == 'git-receive-pack' || service == 'git-upload-pack'
+          repo.getFromService(@response, service)
+        else
+          response.statusCode = 500 # TODO do something else here?
+          response.write "500 Internal Server Error\n"
 
-        try
-          gitPath = path.join('.git', @params.file)
+    @route 'projectGitReceivePack',
+      path: '/project.git/git-receive-pack'
+      where: 'server'
+      action: ->
+        return unless checkMethod(@request, @response, 'POST')
+        repo.postToService(@request, @response, 'git-receive-pack')
+        repo.resetHard()
 
-          @response.statusCode = 200
-          @response.setHeader 'Content-Type', 'application/octet-stream'
-
-          if /\bgzip\b/.test(@request.headers['accept-encoding'])
-            @response.setHeader 'Content-Encoding', 'gzip'
-            repo.gzipStreamFile gitPath, @response
-          else
-            repo.streamFile gitPath, @response
-
-        catch error
-          @response.removeHeader 'Content-Encoding'
-          if error.code == 'ENOENT' || error.code == 'EISDIR'
-            @response.statusCode = 404
-            @response.write "404 Not Found\n"
-          else
-            console.log [@params.file, error]
-            @response.statusCode = 500
-            @response.write "500 Internal Server Error\n"
+    @route 'projectGitReceivePack',
+      path: '/project.git/git-upload-pack'
+      where: 'server'
+      action: ->
+        return unless checkMethod(@request, @response, 'POST')
+        repo.postToService(@request, @response, 'git-upload-pack')
