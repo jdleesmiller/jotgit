@@ -40,13 +40,6 @@ class Repo extends EventEmitter
     # the bare repo instead
     @runInRepoPath 'git', ['config', 'receive.denyCurrentBranch', 'ignore']
 
-    # this post-update hook allows access via git's "dumb protocol"
-    postUpdateHook = Path.join(@repoPath, '.git', 'hooks', 'post-update')
-    unless fs.existsSync(postUpdateHook)
-      fs.linkSync "#{postUpdateHook}.sample", postUpdateHook
-
-    @runInRepoPath 'git', ['update-server-info']
-
     watcher = chokidar.watch(@repoPath,
       ignored: /\/\.git/,
       ignoreInitial: true)
