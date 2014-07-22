@@ -1,6 +1,9 @@
 {
   "packages": {
-    "bower": {},
+    "bower": {
+      "branch" : "master",
+      "git" : "https://github.com/mquandalle/meteor-bower.git"
+      },
     "iron-router": {},
     "jade": {}
   },
