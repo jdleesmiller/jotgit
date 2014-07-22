@@ -2,15 +2,18 @@
   "meteor": {},
   "dependencies": {
     "basePackages": {
-      "bower": {},
+      "bower": {
+        "git": "https://github.com/mquandalle/meteor-bower.git",
+        "branch": "master"
+      },
       "iron-router": {},
       "jade": {}
     },
     "packages": {
       "bower": {
         "git": "https://github.com/mquandalle/meteor-bower.git",
-        "tag": "v0.1.8",
-        "commit": "5699c3f29a936dcb2aa1221a9febd4669764fc91"
+        "branch": "master",
+        "commit": "0bdc01164fc69abf6ff2b575b0cfb740c25385f3"
       },
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router.git",
@@ -19,8 +22,8 @@
       },
       "jade": {
         "git": "https://github.com/mquandalle/meteor-jade.git",
-        "tag": "v0.2.2",
-        "commit": "0391abab7d592b17ff74d9b9beaa721051970729"
+        "tag": "v0.2.4",
+        "commit": "a47a4c59daaa57e7fe5f1544d4ea76d95a5c9abf"
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",
