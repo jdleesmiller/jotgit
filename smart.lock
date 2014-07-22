@@ -2,15 +2,18 @@
   "meteor": {},
   "dependencies": {
     "basePackages": {
-      "bower": {},
+      "bower": {
+        "git": "https://github.com/tvararu/meteor-bower.git",
+        "branch": "master"
+      },
       "iron-router": {},
       "jade": {}
     },
     "packages": {
       "bower": {
-        "git": "https://github.com/mquandalle/meteor-bower.git",
-        "tag": "v0.1.9",
-        "commit": "0bdc01164fc69abf6ff2b575b0cfb740c25385f3"
+        "git": "https://github.com/tvararu/meteor-bower.git",
+        "branch": "master",
+        "commit": "9e30f4f960a5b61afea93e52c6ca71c2f9e33256"
       },
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router.git",
