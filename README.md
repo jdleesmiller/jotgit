@@ -46,8 +46,6 @@ It should pull in all of the required dependencies. Make some tea.
 
 Then visit [localhost:3000](http://localhost:3000) in your browser. Be sure to try with multiple windows!
 
-Note: for now, you can ignore the message advising you to upgrade to meteor 0.8.2, because there seems to be a problem with the meteor-bower package in 0.8.2.
-
 By default, it loads up the test repository in `tests/demo`. To point it at another repository, you can either edit `server/jotgit.coffee` or use [meteor settings](http://docs.meteor.com/#meteor_settings) to specify an alternative `projectPath`.
 
 ## About
@@ -66,7 +64,7 @@ The code is structured in the usual way for a meteor app: the files in `server` 
 
 ## Roadmap
 
-* allow remote pushes to the repository
+* allow remote pushes to the repository (mostly done, but still need to notify web clients after a push)
 
 * auto-saves
 
