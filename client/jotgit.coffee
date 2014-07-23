@@ -10,6 +10,28 @@
 
 Template.files.files = -> Files.find()
 
+Template.files.events(
+  'click a.createFile': ->
+    $('a.createFile').text('choose new file name...')
+    filename = prompt('Please enter a new file name:')
+    if filename == null
+      filename = 'unnamed.md'
+
+    sublist = filename.split('.')
+    if sublist.length == 1 || sublist[sublist.length-1] != 'md'
+      filename += '.md'
+    
+    #precondition: filename ends on '.md'
+    while Files.findOne({path: filename})
+      filename = filename.substring(0, filename.length-3) + '-1.md'
+    #postcondition: filename is unique
+
+    Meteor.call 'createFile', filename, (error, result) ->
+      $('a.createFile').text('Create new file')
+      alert(result) if result != 'success'
+    false
+)
+
 Template.fileEdit.fileInfo = -> FileInfo.findOne()
 
 Template.fileEdit.events(
