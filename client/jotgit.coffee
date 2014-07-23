@@ -10,6 +10,8 @@
 
 Template.files.files = -> Files.find()
 
+autoSaveTimer = null
+
 Template.files.events(
   'click a.createFile': ->
     $('a.createFile').text('choose new file name...')
@@ -32,14 +34,38 @@ Template.files.events(
     false
 )
 
-autoSaveTimer = null
-Template.files.events(
-  'click #autosave-checkbox': ->
-    if $("#autosave-checkbox").prop("checked")
-      autoSaveTimer = Meteor.setInterval(commit, 30000)
+Template.fileEdit.events(
+  'click div.btn-group.btn-toggle': ->
+    console.log 'toggle-toggle'
+    $('.btn-toggle').children('.btn').toggleClass "active"
+                                      .toggleClass "btn-primary"
+    if $('#timer-on-button').hasClass("active")
+      console.log "on"
+      $('#timer-settings').css('display': 'inline-block')
+      timeInMillisecs = getTimerMillis()
+      if timeInMillisecs
+        autoSaveTimer = Meteor.setInterval(commit, timeInMillisecs)
+      else
+        setTimer(5)
+        autoSaveTimer = Meteor.setInterval(commit, 300000)
     else
+      console.log "off"
+      $('#timer-settings').hide()
       Meteor.clearInterval autoSaveTimer
+    false
 )
+
+Template.fileEdit.events(
+  'change #autosave-time': ->
+    timeInMillisecs = getTimerMillis()
+    if timeInMillisecs
+      Meteor.clearInterval autoSaveTimer
+      autoSaveTimer = Meteor.setInterval(commit, timeInMillisecs)
+    else
+      console.log 'invalid timer input'
+    false
+)
+
 
 Template.fileEdit.fileInfo = -> FileInfo.findOne()
 
@@ -86,11 +112,22 @@ class MeteorServerAdapter
     action.apply(this, Array.prototype.slice.call(arguments, 1)) if action
 
 commit = (message = 'Autosave') ->
-  console.log 'committing'
+  console.log 'committing...'
   $('a.commit').text('saving...')
   Meteor.call 'commit', message, (error, result) ->
         $('a.commit').text('save project')
         alert(result) if result != 'success'
+
+getTimerMillis =->
+  timeInMinutes = parseFloat($('#autosave-time').val())
+  if timeInMinutes.isNan
+    return false
+  else
+    return timeInMinutes * 60000
+
+setTimer = (time) ->
+  $('#autosave-time').val(time)
+
 
 Deps.autorun ->
   fileInfo = FileInfo.findOne()
