@@ -10,6 +10,13 @@
 
 Template.files.files = -> Files.find()
 
+Template.files.rendered = ->
+  $('#file-upload').fileupload(
+    dataType: 'json',
+    done: (error, data) ->
+      console.log([error, data])
+  )
+
 Template.files.events(
   'click a.createFile': ->
     $('a.createFile').text('choose new file name...')

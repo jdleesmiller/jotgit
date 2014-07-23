@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "blueimp-file-upload": {
+      "version": "9.5.8"
+    }
+  }
+}

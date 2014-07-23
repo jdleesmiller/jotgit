@@ -7,6 +7,19 @@ template(name="home")
         +files
       div.col-md-4
         img#logo(src='/images/logos.png')
+  div.modal.fade
+    div#file-upload-modal.modal-dialog
+      div.modal-content
+        div.modal-header
+          button.close(type='button' data-dismiss='modal')
+            span(aria-hidden='true') &times;
+            span.sr-only Close
+          h4.modal-title Uploading...
+        div.modal-body
+          div#file-upload-progress.progress
+            div.progress-bar.progress-bar-success
+        div.modal-footer
+          button.btn.btn-default(type='button' data-dismiss='modal') Close
 
 template(name="files")
   ul
@@ -14,6 +27,10 @@ template(name="files")
       li
         a(href="{{pathFor 'fileEdit' path}}") {{path}}
   a.createFile(href='#') Create new file
+  span.btn.btn-success.fileinput-button
+    i.glyphicon.glyphicon-plus
+      span Upload files...
+      input#file-upload(type='file' name='files[]' multiple)
 
 template(name="fileEdit")
   div.container
