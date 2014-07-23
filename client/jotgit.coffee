@@ -36,11 +36,9 @@ Template.files.events(
 
 Template.fileEdit.events(
   'click div.btn-group.btn-toggle': ->
-    console.log 'toggle-toggle'
     $('.btn-toggle').children('.btn').toggleClass "active"
                                       .toggleClass "btn-primary"
     if $('#timer-on-button').hasClass("active")
-      console.log "on"
       $('#timer-settings').css('display': 'inline-block')
       timeInMillisecs = getTimerMillis()
       if timeInMillisecs
@@ -49,7 +47,6 @@ Template.fileEdit.events(
         setTimer(5)
         autoSaveTimer = Meteor.setInterval(commit, 300000)
     else
-      console.log "off"
       $('#timer-settings').hide()
       Meteor.clearInterval autoSaveTimer
     false
