@@ -5,8 +5,7 @@
       "branch": "master"
     },
     "iron-router": {},
-    "jade": {},
-    "bootstrap-3": {}
+    "jade": {}
   },
   "bower": {
     "codemirror": {
@@ -14,6 +13,9 @@
       "additionalFiles": [
         "mode/markdown/markdown.js"
       ]
+    },
+    "bootstrap": {
+      "version": "3.2.0"
     }
   }
 }

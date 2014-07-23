@@ -7,8 +7,7 @@
         "branch": "master"
       },
       "iron-router": {},
-      "jade": {},
-      "bootstrap-3": {}
+      "jade": {}
     },
     "packages": {
       "bower": {
@@ -25,11 +24,6 @@
         "git": "https://github.com/mquandalle/meteor-jade.git",
         "tag": "v0.2.4",
         "commit": "a47a4c59daaa57e7fe5f1544d4ea76d95a5c9abf"
-      },
-      "bootstrap-3": {
-        "git": "https://github.com/mangasocial/meteor-bootstrap-3.git",
-        "tag": "v3.2.0-1",
-        "commit": "17a63902fc6cf1096c5289d963c66cf28b474727"
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",
