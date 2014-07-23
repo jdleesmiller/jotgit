@@ -16,3 +16,9 @@ img#logo {
   padding-top: 20px;
   width: 100px;
 }
+
+label {
+  clear: both;
+  white-space: nowrap;
+  display: inline-block;
+}

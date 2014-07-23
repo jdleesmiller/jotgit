@@ -20,7 +20,7 @@ Template.files.events(
     sublist = filename.split('.')
     if sublist.length == 1 || sublist[sublist.length-1] != 'md'
       filename += '.md'
-    
+
     #precondition: filename ends on '.md'
     while Files.findOne({path: filename})
       filename = filename.substring(0, filename.length-3) + '-1.md'
@@ -32,6 +32,15 @@ Template.files.events(
     false
 )
 
+autoSaveTimer = null
+Template.files.events(
+  'click #autosave-checkbox': ->
+    if $("#autosave-checkbox").prop("checked")
+      autoSaveTimer = Meteor.setInterval(commit, 30000)
+    else
+      Meteor.clearInterval autoSaveTimer
+)
+
 Template.fileEdit.fileInfo = -> FileInfo.findOne()
 
 Template.fileEdit.events(
@@ -41,9 +50,7 @@ Template.fileEdit.events(
     if message == null
       $('a.commit').text('save project')
     else
-      Meteor.call 'commit', message, (error, result) ->
-        $('a.commit').text('save project')
-        alert(result) if result != 'success'
+      commit message
     false
 )
 
@@ -77,6 +84,13 @@ class MeteorServerAdapter
   trigger: (event) ->
     action = this.callbacks && this.callbacks[event]
     action.apply(this, Array.prototype.slice.call(arguments, 1)) if action
+
+commit = (message = 'Autosave') ->
+  console.log 'committing'
+  $('a.commit').text('saving...')
+  Meteor.call 'commit', message, (error, result) ->
+        $('a.commit').text('save project')
+        alert(result) if result != 'success'
 
 Deps.autorun ->
   fileInfo = FileInfo.findOne()

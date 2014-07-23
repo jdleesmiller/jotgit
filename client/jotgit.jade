@@ -1,10 +1,12 @@
 template(name="home")
   div.container
     div.row
-      img#logo(src='/images/logos.png')
-      h1 jotgit
-      h2 files
-      +files
+      div.col-md-8
+        h1 jotgit
+        h2 files
+        +files
+      div.col-md-4
+        img#logo(src='/images/logos.png')
 
 template(name="files")
   ul
@@ -16,10 +18,25 @@ template(name="files")
 template(name="fileEdit")
   div.container
     div.row
-      img#logo(src='/images/logos.png')
-      h1 jotgit
-      a.commit(href='#') save project
-      h2 files
-      +files
-      h3 {{fileInfo._id}}
-      textarea#editor
+      div.col-md-8
+        h1 jotgit
+        a.commit(href='#') save project
+      div.col-md-4
+        img#logo(src='/images/logos.png')
+    div.row
+      div.col-md-4
+        h2 files
+        +files
+    div.row
+      div.col-md-2
+        input(type='checkbox', id='autosave-checkbox')
+        label(for="autosave-checkbox") Auto-save
+        span every
+      div.col-md-4
+        input(id='autosave-time')
+        span ms
+
+    div.row
+      div.col-md-8
+        h3 {{fileInfo._id}}
+        textarea#editor
