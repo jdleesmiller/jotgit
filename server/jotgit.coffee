@@ -107,6 +107,11 @@ Meteor.startup ->
         repo.writeFile filePath, server.document()
       result = repo.commit(message)
       result
+
+    createFile: (fileName) ->
+      repo.createFile fileName
+      result = repo.commit('Created new file')
+      result
   )
 
   checkMethod = (request, response, allowedMethod) ->

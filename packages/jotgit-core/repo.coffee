@@ -95,6 +95,10 @@ class Repo extends EventEmitter
     absolutePath = @checkPath(path)
     fs.writeFileSync(absolutePath, data, encoding: 'utf8')
 
+  createFile: (path) ->
+    absolutePath = @checkPath(path)
+    fs.writeFileSync(absolutePath, '', encoding: 'utf8')
+
   spawnInRepoPath: (command, args=[], options={}) ->
     options.cwd = @repoPath
     spawn(command, args, options)

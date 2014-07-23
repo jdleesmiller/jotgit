@@ -25,6 +25,20 @@ Template.fileEdit.events(
     false
 )
 
+Template.fileEdit.events(
+  'click a.createFile': ->
+    $('a.createFile').text('choose new file name...')
+    message = prompt('Please enter a new file name:')
+    if message == null
+      message = 'unnamed.md'
+    # missing: * check if file exists already
+    #          * add '.md' if necessary
+    Meteor.call 'createFile', message, (error, result) ->
+      $('a.createFile').text('Create new file')
+      alert(result) if result != 'success'
+    false
+)
+
 # note: this isn't called when switching between files
 Template.fileEdit.rendered = ->
   Jotgit.cm = CodeMirror.fromTextArea(editor,

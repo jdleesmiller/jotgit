@@ -11,6 +11,7 @@ template(name="files")
     each files
       li
         a(href="{{pathFor 'fileEdit' path}}") {{path}}
+  a.createFile(href='#') Create new file
 
 template(name="fileEdit")
   div.container
