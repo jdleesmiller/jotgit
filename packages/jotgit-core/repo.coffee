@@ -99,6 +99,11 @@ class Repo extends EventEmitter
     absolutePath = @checkPath(path)
     fs.writeFileSync(absolutePath, '', encoding: 'utf8')
 
+  renameFile: (oldPath, newPath) ->
+    absoluteOldPath = @checkPath(oldPath)
+    absoluteNewPath = @checkPath(newPath)
+    fs.renameSync(absoluteOldPath, absoluteNewPath)
+
   spawnInRepoPath: (command, args=[], options={}) ->
     options.cwd = @repoPath
     spawn(command, args, options)

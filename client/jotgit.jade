@@ -40,5 +40,9 @@ template(name="fileEdit")
 
     div.row
       div.col-md-8
-        h3 {{fileInfo._id}}
+        h3(id="file-name") {{fileInfo._id}}
+        form(id="rename-form")
+          h3
+            input(id='new-file-name', type="text")
+            input(type="submit", value="Rename", class='btn btn-xs')
         textarea#editor

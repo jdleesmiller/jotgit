@@ -10,8 +10,6 @@
 
 Template.files.files = -> Files.find()
 
-autoSaveTimer = null
-
 Template.files.events(
   'click a.createFile': ->
     $('a.createFile').text('choose new file name...')
@@ -19,20 +17,17 @@ Template.files.events(
     if filename == null
       filename = 'unnamed.md'
 
-    sublist = filename.split('.')
-    if sublist.length == 1 || sublist[sublist.length-1] != 'md'
-      filename += '.md'
-
-    #precondition: filename ends on '.md'
-    while Files.findOne({path: filename})
-      filename = filename.substring(0, filename.length-3) + '-1.md'
-    #postcondition: filename is unique
+    filename = verifyFileName(filename)
 
     Meteor.call 'createFile', filename, (error, result) ->
       $('a.createFile').text('Create new file')
       alert(result) if result != 'success'
     false
 )
+
+Template.fileEdit.fileInfo = -> FileInfo.findOne()
+
+autoSaveTimer = null
 
 Template.fileEdit.events(
   'click div.btn-group.btn-toggle': ->
@@ -63,9 +58,6 @@ Template.fileEdit.events(
     false
 )
 
-
-Template.fileEdit.fileInfo = -> FileInfo.findOne()
-
 Template.fileEdit.events(
   'click a.commit': ->
     $('a.commit').text('saving...')
@@ -74,6 +66,26 @@ Template.fileEdit.events(
       $('a.commit').text('save project')
     else
       commit message
+    false
+)
+
+Template.fileEdit.events(
+  'click #file-name': ->
+    $("#file-name").hide()
+    $("#rename-form").css('display': 'inline-block')
+    false
+)
+
+Template.fileEdit.events(
+  'submit #rename-form': ->
+    filename = verifyFileName($("#new-file-name").val())
+    if filename == ".md"
+      alert('enter a valid name')
+    else
+      Meteor.call 'renameFile', fileInfo._id, filename, (error, result) ->
+        alert(result) if result != 'success'
+      $("#rename-form").hide()
+      $("#file-name").css('display': 'inline-block')
     false
 )
 
@@ -124,6 +136,17 @@ getTimerMillis =->
 
 setTimer = (time) ->
   $('#autosave-time').val(time)
+
+verifyFileName = (filename) ->
+  sublist = filename.split('.')
+  if sublist.length == 1 || sublist[sublist.length-1] != 'md'
+    filename += '.md'
+
+  #precondition: filename ends on '.md'
+  while Files.findOne({path: filename})
+    filename = filename.substring(0, filename.length-3) + '-1.md'
+  #postcondition: filename is unique
+  return filename
 
 
 Deps.autorun ->

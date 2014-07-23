@@ -24,3 +24,15 @@ input#autosave-time {
   vertical-align: top;
   margin-bottom: 0px;
 }
+
+form#rename-form {
+  display: none;
+  margin-bottom: 0px;
+}
+
+input#new-file-name {
+  font-size: large;
+  height: 23px;
+  vertical-align: middle;
+  margin-bottom: 0px;
+}
