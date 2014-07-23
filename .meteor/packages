@@ -6,7 +6,6 @@
 standard-app-packages
 insecure
 coffeescript
-bootstrap
 jquery
 bower
 iron-router
