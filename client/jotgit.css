@@ -12,13 +12,15 @@
 }
 
 img#logo {
-  float: right;
   padding-top: 20px;
   width: 100px;
 }
 
-label {
-  clear: both;
-  white-space: nowrap;
-  display: inline-block;
+#timer-settings {
+  display: none;
+}
+
+input#autosave-time {
+  vertical-align: top;
+  margin-bottom: 0px;
 }

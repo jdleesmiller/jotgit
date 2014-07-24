@@ -1,11 +1,11 @@
 template(name="home")
   div.container
     div.row
-      div.col-md-8
+      div.col-md-11
         h1 jotgit
         h2 files
         +files
-      div.col-md-4
+      div.col-md-1
         img#logo(src='/images/logos.png')
 
 template(name="files")
@@ -18,23 +18,25 @@ template(name="files")
 template(name="fileEdit")
   div.container
     div.row
-      div.col-md-8
+      div.col-md-11
         h1 jotgit
         a.commit(href='#') save project
-      div.col-md-4
+      div.col-md-1
         img#logo(src='/images/logos.png')
     div.row
       div.col-md-4
         h2 files
         +files
     div.row
-      div.col-md-2
-        input(type='checkbox', id='autosave-checkbox')
-        label(for="autosave-checkbox") Auto-save
-        span every
-      div.col-md-4
-        input(id='autosave-time')
-        span ms
+      div.col-md-12
+        span Auto-save
+        div.btn-group.btn-toggle
+          button.btn.btn-xs(id="timer-on-button") On
+          button.btn.btn-xs.btn-primary.active(id="timer-off-button") Off
+        div(id="timer-settings")
+          span every
+          input(id='autosave-time', type="text")
+          | minutes
 
     div.row
       div.col-md-8
